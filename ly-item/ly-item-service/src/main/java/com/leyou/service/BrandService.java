@@ -47,7 +47,8 @@ public class BrandService {
     @Transactional
     public void saveBrand(Brand brand, List<Long> cids) {
         try {
-            int insert = brandMapper.insert(brand);
+            //insert和insertSelective的区别：insert会把没有的字段设置为null，insertSelective不会
+            int insert = brandMapper.insertSelective(brand);
             //插入品牌和分类的关联表
             for (Long cid : cids){
                 brandMapper.insertCategoryBrand(cid,brand.getId());

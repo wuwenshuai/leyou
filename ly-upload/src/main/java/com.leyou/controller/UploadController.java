@@ -19,7 +19,7 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-    @PostMapping("image")
+    /*@PostMapping("image")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file){
        String url =  uploadService.upload(file);
         System.out.println("url:"+url);
@@ -28,6 +28,15 @@ public class UploadController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
        return ResponseEntity.ok(url);
+    }*/
+
+    @PostMapping("/image")
+    public ResponseEntity<String> uploadImg(@RequestParam("file") MultipartFile file) {
+        String upload = uploadService.upload(file);
+        if (StringUtils.isBlank(upload)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(upload);
     }
 
 

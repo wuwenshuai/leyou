@@ -3,6 +3,7 @@ package com.leyou.controller;
 
 import com.leyou.pojo.Category;
 import com.leyou.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("category")
+@Slf4j
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
@@ -24,6 +26,7 @@ public class CategoryController {
     @GetMapping("list")
     public ResponseEntity<List<Category>>queryListByParent( @RequestParam(value = "pid", defaultValue = "0") Long pid){
 
+        //校验pid，省略
         List<Category> categoryList = categoryService.queryListByParent(pid);
         if (categoryList==null||categoryList.size()<=0){
             //返回404

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("brand")
+@RequestMapping("/brand")
 public class BrandController {
 
     @Autowired
@@ -33,8 +33,9 @@ public class BrandController {
     }
 
     /**
-     * 品牌
+     * 新增品牌
      */
+    @PostMapping
     public ResponseEntity<Void> saveBrand(Brand brand, @RequestParam("cids")List<Long>cids){
         brandService.saveBrand(brand,cids);
         return new ResponseEntity<>(HttpStatus.CREATED);

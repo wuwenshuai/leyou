@@ -8,10 +8,7 @@ import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,12 +42,18 @@ public class SpecificationController {
      * @return
      */
     @GetMapping("params")
-    ResponseEntity<List<SpecParam>> getSpecParamByGid(Long gid) {
+    public ResponseEntity<List<SpecParam>> queryParams(
+            @RequestParam(value = "gid", required = false)Long gid,
+            @RequestParam(value = "cid", required = false)Long cid,
+            @RequestParam(value = "generic", required = false)Boolean generic,
+            @RequestParam(value = "searching", required = false)Boolean searching
+    ){
 
-        List<SpecParam> specParams = specificationService.getSpecParamByGid(gid);
-        if (CollectionUtils.isEmpty(specParams)) {
+        List<SpecParam> params = this.specificationService.queryParams(gid, cid, generic, searching);
+
+        if (CollectionUtils.isEmpty(params)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(specParams);
+        return ResponseEntity.ok(params);
     }
 }

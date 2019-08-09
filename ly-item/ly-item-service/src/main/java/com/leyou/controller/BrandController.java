@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,5 +40,17 @@ public class BrandController {
     public ResponseEntity<Void> saveBrand(Brand brand, @RequestParam("cids")List<Long>cids){
         brandService.saveBrand(brand,cids);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    /**
+     * 根据cid来查询品牌名称
+     */
+    @GetMapping("/cid/{cid}")
+    public ResponseEntity<List<Brand>> queryBrandListByCid(@PathVariable("cid") Long cid) {
+        List<Brand> brandList = brandService.queryBrandListByCid(cid);
+        if (CollectionUtils.isEmpty(brandList)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(brandList);
     }
 }

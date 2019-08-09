@@ -20,16 +20,17 @@ public class BrandService {
 
     @Autowired
     private BrandMapper brandMapper;
+
     public PageResult<Brand> queryBrandByPageAndSort(Integer page, Integer rows, String sortBy, Boolean desc, String key) {
 
         //select * from Brand where key like '%'xx'%' or
         //分页
-        PageHelper.startPage(page,rows);
+        PageHelper.startPage(page, rows);
         //过滤
         Example example = new Example(Brand.class);
-        if (StringUtils.isNotBlank(key)){
+        if (StringUtils.isNotBlank(key)) {
             //创建查询条件
-            example.createCriteria().andLike("name","%"+key+"%").orEqualTo("letter",key.toUpperCase());
+            example.createCriteria().andLike("name", "%" + key + "%").orEqualTo("letter", key.toUpperCase());
         }
         //排序
 
@@ -41,7 +42,7 @@ public class BrandService {
         //查询
         Page<Brand> brands = (Page<Brand>) brandMapper.selectByExample(example);
         //返回结果
-        return  new PageResult<>(brands.getTotal(),brands);
+        return new PageResult<>(brands.getTotal(), brands);
     }
 
     @Transactional
@@ -50,12 +51,16 @@ public class BrandService {
             //insert和insertSelective的区别：insert会把没有的字段设置为null，insertSelective不会
             int insert = brandMapper.insertSelective(brand);
             //插入品牌和分类的关联表
-            for (Long cid : cids){
-                brandMapper.insertCategoryBrand(cid,brand.getId());
+            for (Long cid : cids) {
+                brandMapper.insertCategoryBrand(cid, brand.getId());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new LyException(ExceptionEnum.GOODS_SAVE_ERROR);
         }
 
+    }
+
+    public List<Brand> queryBrandListByCid(Long cid) {
+        return brandMapper.queryBrandListByCid(cid);
     }
 }
